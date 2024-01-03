@@ -1,0 +1,888 @@
+<style>
+/** File Transfer **/
+.section-calculation {
+    padding: 20px 20px 10px 20px;
+    text-align: left;
+    background: #020331;
+    border-radius:10px;
+    color: white;
+}
+.section-calculation h3 {
+    color: #fff;
+    font-size: 19px;
+    text-align: left;
+    font-weight:500;
+    margin: 0 0 20px 0;
+}
+.section-calculation h3 i{
+    color:#ff4c49;
+    margin-right:5px;
+}
+.default-form .form-group {
+    margin-bottom: 15px;
+}
+.default-form .form-control {
+    color: #fff;
+    background-color:#020331;
+    border:none;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-radius: 0;
+    padding-left:0;
+    box-shadow:none;
+    font-size:14px;
+}
+.default-form .form-control::placeholder {
+    color: #fff;
+}
+.default-form select.form-control {
+    cursor:pointer;
+}
+
+</style>
+<h2 style="text-align: center; "><span style="font-size: 36px;"><b>Calculators</b></span></h2>
+<div class="row">
+                       <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+        <div class="section-calculation">
+            <h3><i class="fa fa-calculator"><div style="text-align: center;"></div></i> File Transfer Speed </h3>
+            <div class="form-group">
+                <input placeholder="File size" type="text" class="form-control filesize" name="filesize" id="fileSizeUT">
+            </div>
+            <div class="form-group">
+                <select name="filesizetype" class="form-control" id="sizeDropDown">
+                    <option value="KB">KB</option>
+                    <option value="MB">MB</option>
+                    <option value="GB">GB</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input placeholder="Transfer speed" type="text" class="form-control uploadSpeedUT" name="uploadSpeedUT" id="uploadSpeedUT">
+            </div>
+             <div class="form-group">
+                <select name="transferspeedtype" id="speedDropDown" class="form-control">
+                    <option value="Kb">kBits/s</option>
+                    <option value="KB">kBytes/s</option>
+                    <option value="Mb">mBits/s</option>
+                    <option value="MB">mBytes/s</option>
+                </select>
+            </div>
+            <div id="uploadTimeUT" style="margin:10px;color:#ff4c49;"></div>
+        </div>
+    </div>
+                        <!-- Video Size Calculator-->
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Video Size </h3>
+
+                                
+
+                                    <div class="form-group">
+                                        <input placeholder="Video Duration (seconds)" type="number" id="videoDuration" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="frameSize">Video Resolution (Frame Size):</label>
+                                        <select id="frameSize" class="form-control">
+                                            <option value="720">720p HD</option>
+                                            <option value="1080">1080p Full HD</option>
+                                            <option value="3840">4K UHD</option>
+                                            <option value="5120">5K</option>
+                                            <option value="7680">8K UHD</option>
+                                            <option value="640">360p</option>
+                                            <option value="480">480p</option>
+                                            <option value="576">576p</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input placeholder="Frame Per Second (fps)" type="number" id="fps" class="form-control">
+                                    </div>
+                                
+                                <div id="result" style="margin:10px;color:#ff4c49;"><span style="color: white">Output:</span><br> 270000.00 KB (263.67 MB)</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <!--Video Frame Size Calculator-->
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Video Frame Size</h3>
+                                <div class="form-group">
+                                    <input type="number" id="horizontalResolution" placeholder="Enter Horizontal pixel" class="form-control" oninput="calculateFrameSize()">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="verticalResolution" placeholder="Enter Vertical Pixel" class="form-control" oninput="calculateFrameSize()">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="colorDepth" placeholder="Enter Color Depth (bits)" class="form-control" oninput="calculateFrameSize()">
+                                </div>
+
+                                <div class="form-group">
+                                    <select id="unitSelector" onchange="calculateFrameSize()" class="form-control file_size_type">
+                                        <option value="bits">Bits</option>
+                                        <option value="bytes">Bytes</option>
+                                        <option value="kilobytes">Kilobytes</option>
+                                        <option value="megabytes">Megabytes</option>
+                                        <option value="gigabytes">Gigabytes</option>
+                                    </select>
+                                </div>
+
+                                <div id="resultframeSize" style="margin:10px;color:#ff4c49;"><span style="color: white">Frame Size:</span> 125.00 bits</div>
+                            </div>
+                        </div>
+                        <!--Rendering Time Calculator-->
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Rendering Time Calculator</h3>
+                                <form id="renderTimeCalculator">
+                                    <div class="form-group">
+                                        <input type="number" placeholder="Time per Frame" id="timePerFrame" min="0" step="0.01" required="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timetype">Select Time Type:</label>
+                                        <select id="timeType" class="form-control">
+                                            <option value="seconds">Seconds</option>
+                                            <option value="minutes">Minutes</option>
+                                            <option value="hours">Hours</option>
+                                            <option value="days">Days</option>
+                                            <option value="milliseconds">Milliseconds</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" placeholder="Total Frames" id="totalFrames" min="0" required="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" placeholder="Number of Machines" id="machines" min="1" required="" class="form-control">
+                                    </div>
+                                </form>
+                                <div id="totalRenderTime" style="margin-left:50px;color:#ff4c49;"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Timecode to Frames </h3>
+                                <form id="timecodeToFramesForm">
+                                    <div class="form-group">
+                                        <input placeholder="HH" type="number" id="hours" class="form-control" min="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <input placeholder="MM" type="number" id="minutes" class="form-control" min="0" max="59">
+                                    </div>
+                                    <div class="form-group">
+                                        <input placeholder="SS" type="number" id="seconds" class="form-control" min="0" max="59">
+                                    </div>
+                                    <div class="form-group">
+                                        <input placeholder="FR" type="number" id="frames" class="form-control" min="0" max="59">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="frameRate">Frame Rate (fps):</label>
+                                        <select id="frameRate" class="form-control">
+                                            <option value="12">12 fps</option>
+                                            <option value="24">24 fps</option>
+                                            <option value="30">30 fps</option>
+                                            <option value="60">60 fps</option>
+                                            <!-- Add more frame rates as needed -->
+                                        </select>
+                                    </div>
+                                </form>
+                                <div id="frameNumber" style="margin: 10px; color: #ff4c49;"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Streaming Bitrate Calculator </h3>
+                                <form id="streaming-bitrate-form">
+                                    
+                                        <div class="form-group">
+                                            <label for="bitrateresolution">Select Resolution (pixel):</label>
+                                            <select id="bitrateresolution" class="form-control">
+                                                <option value="1280x720">720p HD (1280x720)</option>
+                                                <option value="1920x1080">1080p Full HD (1920x1080)</option>
+                                                <option value="2560x1440">1440p QHD (2560x1440)</option>
+                                                <option value="3840x2160">4K UHD (3840x2160)</option>
+                                                <option value="4096x2160">4K DCI (4096x2160)</option>
+                                                <option value="5120x2880">5K (5120x2880)</option>
+                                                <option value="7680x4320">8K UHD (7680x4320)</option>
+                                                <option value="720x480">480p (720x480)</option>
+                                                <option value="720x576">576p (720x576)</option>
+                                                <option value="640x360">360p (640x360)</option>
+                                                <option value="426x240">240p (426x240)</option>
+                                                <option value="256x144">144p (256x144)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bitrate-fps">Frame Rate (fps):</label>
+                                            <select id="bitrate-fps" class="form-control">
+                                                <option value="12">12 fps</option>
+                                                <option value="24">24 fps</option>
+                                                <option value="30">30 fps</option>
+                                                <option value="60">60 fps</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bitrate-bpp">Bits per Pixel (BPP):</label>
+                                            <input type="number" id="bitrate-bpp" min="0.01" max="0.1" step="0.01" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="uploadSpeed">Upload Speed (Mbps):</label>
+                                            <input type="number" id="uploadSpeed" min="1" class="form-control">
+                                        </div>
+                                    </form>
+                                    <div id="results">
+                                        <div id="recommendedBitrate" style="display: none;margin: 10px; color: #ff4c49;">
+                                        </div>
+                                        <div id="requiredUploadSpeed" style="display: none;margin: 10px; color: #ff4c49;">
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> Raid Calculator </h3>
+                                <form id="raidcalculator">
+                                    <div class="form-group">
+                                        <label for="resolution">Select Raid Level:</label>
+                                        <select id="raidLevel" class="form-control">
+                                            <option value="0">RAID 0</option>
+                                            <option value="1">RAID 1</option>
+                                            <option value="5">RAID 5</option>
+                                            <option value="6">RAID 6</option>
+                                            <!-- Add other RAID levels here -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" placeholder="Size of a Single Disk (GB):" id="diskSize" min="1" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" placeholder="Number of Disks" id="numDisks" min="2" class="form-control">
+                                    </div>
+                                </form>
+                                <div id="raidresults" style="margin: 10px; color: #ff4c49;">
+                <h3>RAID Configuration:</h3>
+                <p>RAID Level: RAID 0</p>
+                <p>Size of a Single Disk: NaN GB</p>
+                <p>Number of Disks: NaN</p>
+                <h3>Capacity Statistics:</h3>
+                <p>Usable Capacity: NaN GB</p>
+                <p>Unavailable Capacity: 0.00 GB</p>
+                <p>Capacity Utilization: NaN%</p>
+            </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                            <div class="section-calculation">
+                                <h3><i class="fa fa-calculator"></i> IP Subnet Calculator</h3>
+                                <form id="subnetCalculatorForm">
+                                    <div class="form-group">
+                                        <input type="text" id="ipAddress" placeholder="IP Address (e.g., 192.168.1.1)" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" id="subnetMask" placeholder="Subnet Mask" class="form-control">
+                                    </div>
+                                </form>
+                                <div id="ipsubnetresult" style="max-width: 100%; overflow: auto; max-height: 400px; margin: 10px; color: rgb(255, 76, 73); display: block;">
+                                    <p>IP Type: <span id="ipType">Public</span></p>
+                                    <p>IP Class: <span id="ipClass"></span></p>
+                                    <p>Network Address: <span id="networkAddress">0</span></p>
+                                    <p>Broadcast Address: <span id="broadcastAddress">255</span></p>
+                                    <p>First Host Address: <span id="firstHostAddress">0.NaN</span></p>
+                                    <p>Last Host Address: <span id="lastHostAddress">255.NaN</span></p>
+                                    <p>Wildcard Mask: <span id="wildcardMask">255</span></p>
+                                    <p>Total Number of Addresses: <span id="totalAddresses">4294967296</span></p>
+                                    <p>Usable Number of Hosts: <span id="usableHosts">4294967294</span></p>
+                                    <p>Binary Subnet Mask: <span id="binarySubnetMask">00000000</span></p>
+                                    <p>Binary IP Address: <span id="binaryIPAddress">00000000</span></p>
+                                    <p>IP Address in Integer: <span id="ipAddressInteger">0</span></p>
+                                    <p>IP Address in Hexadecimal: <span id="ipAddressHex">0x00</span></p>
+                                    <p>in-addr.arpa: <span id="inAddrArpa">0.in-addr.arpa</span></p>
+                                    <p>IPv4-mapped IPv6 Address: <span id="ipv4MappedIPv6">::ffff:00 or ::ffff:0</span></p>
+                                    <p>6to4 Prefix: <span id="sixToFourPrefix">2002:00::/48</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                
+            
+   <script type="text/javascript">
+       
+        // VideoSize 
+        const videoDurationInput = document.getElementById('videoDuration');
+        const frameSizeInput = document.getElementById('frameSize');
+        const fpsInput = document.getElementById('fps');
+
+        videoDurationInput.addEventListener('input', calculateVideoSize);
+        frameSizeInput.addEventListener('change', calculateVideoSize);
+        fpsInput.addEventListener('input', calculateVideoSize);
+
+        function calculateVideoSize(event) {
+            event.preventDefault();
+
+            // Get input values
+            const videoDuration = parseInt(document.getElementById('videoDuration').value, 10);
+            const frameSize = parseInt(document.getElementById('frameSize').value, 10);
+            const fps = parseInt(document.getElementById('fps').value, 10);
+            const bitsPerPixel = 24;
+            let width, height;
+
+            if (frameSize === 720) {
+                width = 1280;
+                height = 720;
+            } else if (frameSize === 1080) {
+                width = 1920;
+                height = 1080;
+            } else if (frameSize === 3840) {
+                width = 3840;
+                height = 2160;
+            } else if (frameSize === 5120) {
+                width = 5120;
+                height = 2880;
+            } else if (frameSize === 7680) {
+                width = 7680;
+                height = 4320;
+            } else if (frameSize === 640) {
+                width = 640;
+                height = 360;
+            } else if (frameSize === 480) {
+                width = 720;
+                height = 480;
+            } else if (frameSize === 576) {
+                width = 720;
+                height = 576;
+            } else {
+                width = 0;
+                height = 0;
+            }
+
+            // Calculate video size
+            const frameSizeBytes = (width * height * bitsPerPixel) / 8;
+            const totalFrames = videoDuration * fps;
+            const videoSizeBytes = frameSizeBytes * totalFrames;
+
+            // Video Size in byte
+            const videoSizeKB = (videoSizeBytes / 1024).toFixed(2);
+            const videoSizeMB = (videoSizeBytes / (1024 * 1024)).toFixed(2);
+            // Display the result
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `<span style="color: white">Output:</span><br> ${videoSizeKB} KB (${videoSizeMB} MB)`;
+        }
+
+        calculateVideoSize();
+    </script>
+    <script type="text/javascript">
+        function calculateFrameSize() {
+            const verticalResolution = parseFloat(document.getElementById('verticalResolution').value);
+            const horizontalResolution = parseFloat(document.getElementById('horizontalResolution').value);
+            const colorDepth = parseFloat(document.getElementById('colorDepth').value);
+            const unitSelector = document.getElementById('unitSelector');
+            const selectedUnit = unitSelector.options[unitSelector.selectedIndex].value;
+
+            if (!isNaN(verticalResolution) && !isNaN(horizontalResolution) && !isNaN(colorDepth)) {
+                const frameSize = (verticalResolution * horizontalResolution * colorDepth) / 8;
+                let result;
+
+                switch (selectedUnit) {
+                    case 'bytes':
+                        result = frameSize;
+                        break;
+                    case 'kilobytes':
+                        result = frameSize / 1024;
+                        break;
+                    case 'megabytes':
+                        result = frameSize / (1024 * 1024);
+                        break;
+                    case 'gigabytes':
+                        result = frameSize / (1024 * 1024 * 1024);
+                        break;
+                    default:
+                        result = frameSize;
+                        break;
+                }
+
+                document.getElementById('resultframeSize').innerHTML =
+                    `<span style="color: white">Frame Size:</span> ${result.toFixed(2)} ${selectedUnit}`;
+            } else {
+                document.getElementById('resultframeSize').textContent = '';
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        // 3rd Rendering Calculator JavaScript
+        const timePerFrameInput = document.getElementById('timePerFrame');
+        const totalFramesInput = document.getElementById('totalFrames');
+        const machinesInput = document.getElementById('machines');
+        const totalRenderTimeOutput = document.getElementById('totalRenderTime');
+        const timeTypeSelector = document.getElementById('timeType');
+
+        // Add event listeners to input elements
+        timePerFrameInput.addEventListener('input', calculateRenderTime);
+        totalFramesInput.addEventListener('input', calculateRenderTime);
+        machinesInput.addEventListener('input', calculateRenderTime);
+        timeTypeSelector.addEventListener('change', calculateRenderTime);
+
+        // Function to calculate total render time
+        function calculateRenderTime() {
+            // Get input values
+            const timePerFrame = parseFloat(timePerFrameInput.value);
+            const totalFrames = parseInt(totalFramesInput.value, 10);
+            const machines = parseInt(machinesInput.value, 10);
+            const timeType = timeTypeSelector.value;
+
+            // Calculate total render time
+            if (!isNaN(timePerFrame) && !isNaN(totalFrames) && !isNaN(machines)) {
+                let totalRenderTime;
+
+                switch (timeType) {
+                    case 'milliseconds':
+                        totalRenderTime = ((timePerFrame / 1000) * totalFrames) / machines;
+                        break;
+                    case 'seconds':
+                        totalRenderTime = ((timePerFrame) * totalFrames) / machines;
+                        break;
+                    case 'minutes':
+                        totalRenderTime = ((timePerFrame * 60) * totalFrames) / machines;
+                        break;
+                    case 'hours':
+                        totalRenderTime = ((timePerFrame * 3600) * totalFrames) / machines;
+                        break;
+                    case 'days':
+                        totalRenderTime = ((timePerFrame * 86400) * totalFrames) / machines;
+                        break;
+                    default:
+                        totalRenderTime = 0;
+                        break;
+                }
+                totalRenderTimeOutput.innerHTML =
+                    `<span style="color: white">Total Render Time:</span><br>${totalRenderTime.toFixed(2)} ${timeType}`;
+
+            } else {
+                totalRenderTimeOutput.textContent = '';
+            }
+        }
+
+        // Initial calculation
+        calculateRenderTime();
+    </script>
+    <script type="text/javascript">
+        function calculateFrameNumber() {
+            const hours = parseInt(document.getElementById('hours').value, 10);
+            const minutes = parseInt(document.getElementById('minutes').value, 10);
+            const seconds = parseInt(document.getElementById('seconds').value, 10);
+            const frames = parseInt(document.getElementById('frames').value, 10);
+            const frameRate = parseInt(document.getElementById('frameRate').value, 10);
+
+            if (!isNaN(hours) && !isNaN(minutes) && !isNaN(seconds) && !isNaN(frames) && !isNaN(frameRate)) {
+                const frameNumber = ((hours * 3600 + minutes * 60 + seconds) * frameRate) + frames;
+                document.getElementById('frameNumber').innerHTML =
+                    `<span style="color: white">Frame Number:</span><br>${frameNumber}`;
+            } else {
+                document.getElementById('frameNumber').textContent = '';
+            }
+        }
+
+        // Add event listeners to input elements
+        document.getElementById('hours').addEventListener('input', calculateFrameNumber);
+        document.getElementById('minutes').addEventListener('input', calculateFrameNumber);
+        document.getElementById('seconds').addEventListener('input', calculateFrameNumber);
+        document.getElementById('frames').addEventListener('input', calculateFrameNumber);
+        document.getElementById('frameRate').addEventListener('change', calculateFrameNumber);
+
+        // Initial calculation
+        calculateFrameNumber();
+    </script>
+
+    <script>
+        const resolutionSelect = document.getElementById('bitrateresolution');
+        const fpsSelect = document.getElementById('bitrate-fps');
+        const bppInput = document.getElementById('bitrate-bpp');
+        const uploadSpeedInput = document.getElementById('uploadSpeed');
+        const recommendedBitrate = document.getElementById('recommendedBitrate');
+        const requiredUploadSpeed = document.getElementById('requiredUploadSpeed');
+
+        function calculateBitrate() {
+            const resolution = resolutionSelect.value;
+            const fps = parseInt(fpsSelect.value);
+            const bpp = parseFloat(bppInput.value);
+            const uploadSpeed = parseInt(uploadSpeedInput.value);
+
+            if (isNaN(bpp) || bpp <= 0) {
+                // Hide the result elements if BPP is not entered or invalid
+                recommendedBitrate.style.display = 'none';
+                requiredUploadSpeed.style.display = 'none';
+                return;
+            }
+
+            const bitrate = Math.round((resolution.split('x')[0] * resolution.split('x')[1] * fps * bpp) / 1000);
+            const requiredSpeed = bitrate * 1.5; // Adding 50% for stability
+
+            recommendedBitrate.innerHTML = `<span style="color: white">Recommended Bitrate:</span><br> ${bitrate} Kbps`;
+            requiredUploadSpeed.innerHTML =
+                `<span style="color: white">Required Upload Speed:</span><br> ${requiredSpeed} Mbps`;
+
+            if (uploadSpeed >= requiredSpeed) {
+                requiredUploadSpeed.style.color = 'green';
+            } else {
+                requiredUploadSpeed.style.color = 'red';
+            }
+
+            // Display the result elements
+            recommendedBitrate.style.display = 'block';
+            requiredUploadSpeed.style.display = 'block';
+        }
+
+        resolutionSelect.addEventListener('change', calculateBitrate);
+        fpsSelect.addEventListener('change', calculateBitrate);
+        bppInput.addEventListener('input', calculateBitrate);
+        uploadSpeedInput.addEventListener('input', calculateBitrate);
+
+        // Initial calculation
+        calculateBitrate();
+    </script>
+
+    <script>
+        const raidLevelInput = document.getElementById("raidLevel");
+        const diskSizeInput = document.getElementById("diskSize");
+        const numDisksInput = document.getElementById("numDisks");
+        const resultsDiv = document.getElementById("raidresults");
+
+        // Function to update results dynamically
+        function updateResults() {
+            const raidLevel = parseInt(raidLevelInput.value);
+            const diskSize = parseFloat(diskSizeInput.value);
+            const numDisks = parseInt(numDisksInput.value);
+
+            let usableCapacity, unavailableCapacity, capacityUtilization;
+
+            // Perform RAID calculations based on selected RAID level
+            switch (raidLevel) {
+                case 0:
+                    usableCapacity = diskSize * numDisks;
+                    unavailableCapacity = 0;
+                    break;
+                case 1:
+                    usableCapacity = diskSize;
+                    unavailableCapacity = diskSize * (numDisks - 1);
+                    break;
+                case 5:
+                    usableCapacity = diskSize * (numDisks - 1);
+                    unavailableCapacity = diskSize;
+                    break;
+                case 6:
+                    usableCapacity = diskSize * (numDisks - 2);
+                    unavailableCapacity = diskSize * 2;
+                    break;
+                    // Add cases for other RAID levels here
+                default:
+                    usableCapacity = 0;
+                    unavailableCapacity = 0;
+            }
+
+            capacityUtilization = (usableCapacity / (usableCapacity + unavailableCapacity)) * 100;
+
+            const results = `
+                <h3>RAID Configuration:</h3>
+                <p>RAID Level: RAID ${raidLevel}</p>
+                <p>Size of a Single Disk: ${diskSize} GB</p>
+                <p>Number of Disks: ${numDisks}</p>
+                <h3>Capacity Statistics:</h3>
+                <p>Usable Capacity: ${usableCapacity.toFixed(2)} GB</p>
+                <p>Unavailable Capacity: ${unavailableCapacity.toFixed(2)} GB</p>
+                <p>Capacity Utilization: ${capacityUtilization.toFixed(2)}%</p>
+            `;
+
+            resultsDiv.innerHTML = results;
+        }
+
+        // Add event listeners to inputs for dynamic updates
+        raidLevelInput.addEventListener("change", updateResults);
+        diskSizeInput.addEventListener("input", updateResults);
+        numDisksInput.addEventListener("input", updateResults);
+
+        // Initial calculation
+        updateResults();
+    </script>
+
+    <script>
+        function calculateProperties() {
+            const ipAddress = document.getElementById("ipAddress").value;
+            const subnetMask = document.getElementById("subnetMask").value;
+
+            // Parse IP Address and Subnet Mask
+            const ipParts = ipAddress.split('.').map(Number);
+            const maskParts = subnetMask.split('.').map(Number);
+
+            // Determine IP Type
+            let ipType = "";
+            if (
+                (ipParts[0] === 10) ||
+                (ipParts[0] === 172 && ipParts[1] >= 16 && ipParts[1] <= 31) ||
+                (ipParts[0] === 192 && ipParts[1] === 168)
+            ) {
+                ipType = "Private";
+            } else {
+                ipType = "Public";
+            }
+
+            // Calculate Network Address
+            const networkAddress = ipParts.map((part, i) => part & maskParts[i]);
+
+            // Calculate Broadcast Address
+            const broadcastAddress = ipParts.map((part, i) => (part | ~maskParts[i]) & 255);
+
+            // Calculate Wildcard Mask
+            const wildcardMask = maskParts.map(part => 255 - part);
+
+            // Calculate Total Number of Addresses
+            const totalAddresses = Math.pow(2, 32 - maskParts.reduce((a, b) => a + (b.toString(2).match(/1/g) || []).length,
+                0));
+
+            // Calculate Usable Number of Hosts
+            const usableHosts = totalAddresses > 2 ? totalAddresses - 2 : 0; // Subtract network and broadcast
+
+            // Determine IP Class
+            let ipClass = "";
+            if (ipParts[0] >= 1 && ipParts[0] <= 126) {
+                ipClass = "Class A";
+            } else if (ipParts[0] >= 128 && ipParts[0] <= 191) {
+                ipClass = "Class B";
+            } else if (ipParts[0] >= 192 && ipParts[0] <= 223) {
+                ipClass = "Class C";
+            } else if (ipParts[0] >= 224 && ipParts[0] <= 239) {
+                ipClass = "Class D";
+            } else if (ipParts[0] >= 240 && ipParts[0] <= 255) {
+                ipClass = "Class E";
+            }
+
+            // Convert Binary IP Address to Integer
+            const ipAddressInteger = parseInt(ipParts.map(part => (part >>> 0).toString(2).padStart(8, '0')).join(''), 2);
+
+            // Convert Binary IP Address to Hexadecimal
+            const ipAddressHex = ipParts.map(part => part.toString(16).padStart(2, '0')).join('');
+
+            // Calculate in-addr.arpa
+            const inAddrArpa = [...networkAddress].reverse().join('.') + '.in-addr.arpa';
+
+            // Calculate IPv4-mapped IPv6 Address in Decimal
+            const ipv4MappedIPv6Decimal = ipParts.map(part => parseInt(part.toString(16), 16)).join('.');
+
+            // Calculate IPv4-mapped IPv6 Address
+            const ipv4MappedIPv6 = `::ffff:${ipAddressHex} or ::ffff:${ipv4MappedIPv6Decimal}`;
+
+            // Calculate 6to4 Prefix
+            const sixToFourPrefix = `2002:${ipAddressHex}::/48`;
+
+            // Display Results
+            document.getElementById("ipType").textContent = ipType;
+            document.getElementById("ipClass").textContent = ipClass;
+            document.getElementById("networkAddress").textContent = networkAddress.join('.');
+            document.getElementById("firstHostAddress").textContent = networkAddress.slice(0, 3).join('.') + '.' + (
+                networkAddress[3] + 1);
+            document.getElementById("lastHostAddress").textContent = broadcastAddress.slice(0, 3).join('.') + '.' + (
+                broadcastAddress[3] - 1);
+            document.getElementById("wildcardMask").textContent = wildcardMask.join('.');
+            document.getElementById("totalAddresses").textContent = totalAddresses;
+            document.getElementById("usableHosts").textContent = usableHosts;
+            document.getElementById("binarySubnetMask").textContent = maskParts.map(part => (part >>> 0).toString(2)
+                .padStart(8, '0')).join('.');
+            document.getElementById("binaryIPAddress").textContent = ipParts.map(part => (part >>> 0).toString(2).padStart(
+                8, '0')).join('.');
+            document.getElementById("broadcastAddress").textContent = broadcastAddress.join('.');
+            document.getElementById("ipAddressInteger").textContent = ipAddressInteger;
+            document.getElementById("ipAddressHex").textContent = `0x${ipAddressHex}`;
+            document.getElementById("inAddrArpa").textContent = inAddrArpa;
+            document.getElementById("ipv4MappedIPv6").textContent = ipv4MappedIPv6;
+            document.getElementById("sixToFourPrefix").textContent = sixToFourPrefix;
+            document.getElementById("ipsubnetresult").style.display = "block";
+        }
+
+        // Calculate properties when input fields change
+        document.getElementById("ipAddress").addEventListener("input", calculateProperties);
+        document.getElementById("subnetMask").addEventListener("input", calculateProperties);
+
+        // Initial calculation
+        calculateProperties();
+    </script>
+<script>
+        let fileSize = document.getElementById('fileSizeUT');
+        let uploadSpeed = document.getElementById('uploadSpeedUT');
+
+        function checkElement(element) {
+            let elmnt = document.getElementById(element);
+            let val = elmnt.value;
+
+            if (val.toString().match(/[a-zA-Z]+/)) {
+                val = val.toString().slice(0, -1);
+                elmnt.value = val;
+            }
+
+            if (((val.toString().match(/\./g) || []).length) > 1) {
+                val = val.toString().slice(0, -1);
+                elmnt.value = val;
+            }
+
+            let elementVal = parseFloat(val);
+
+            if (isNaN(elementVal) || elementVal < 0) {
+                elmnt.style.boxShadow = '0px 0px 3px 1.35px red inset';
+                elmnt.value = '';
+            } else {
+                elmnt.style.boxShadow = '0px 0px 0px 0px black inset';
+                calculateTime(parseFloat(fileSize.value), parseFloat(uploadSpeed.value));
+            }
+        }
+
+        function calculateTime(size, speed) {
+            if (size != null && speed != null && !isNaN(size) && !isNaN(speed)) {
+                if (speed > 0) {
+                    let sizeDropDown = document.getElementById('sizeDropDown');
+                    let speedDropDown = document.getElementById('speedDropDown');
+                    let time = 0;
+                    let multiplier = 0;
+
+                    switch (sizeDropDown.value) {
+                        case 'KB':
+                            switch (speedDropDown.value) {
+                                case 'Kb':
+                                    multiplier = 8;
+                                    break;
+                                case 'KB':
+                                    multiplier = 1;
+                                    break;
+                                case 'Mb':
+                                    multiplier = 0.008;
+                                    break;
+                                case 'MB':
+                                    multiplier = 0.001;
+                                    break;
+                            }
+                            break;
+                        case 'MB':
+                            switch (speedDropDown.value) {
+                                case 'Kb':
+                                    multiplier = 8000;
+                                    break;
+                                case 'KB':
+                                    multiplier = 1000;
+                                    break;
+                                case 'Mb':
+                                    multiplier = 8;
+                                    break;
+                                case 'MB':
+                                    multiplier = 1;
+                                    break;
+                            }
+                            break;
+                        case 'GB':
+                            switch (speedDropDown.value) {
+                                case 'Kb':
+                                    multiplier = 8000000;
+                                    break;
+                                case 'KB':
+                                    multiplier = 1000000;
+                                    break;
+                                case 'Mb':
+                                    multiplier = 8000;
+                                    break;
+                                case 'MB':
+                                    multiplier = 1000;
+                                    break;
+                            }
+                            break;
+                    }
+
+                    time = (size * multiplier) / speed;
+                    if (time == 'Infinity' || time < 1) {
+                        time = 1;
+                    }
+                    displayTime(time.toFixed(2));
+                }
+            } else {
+                return;
+            }
+        }
+
+        function displayTime(time) {
+            let dateTime = new Date(time * 1000);
+            let days = Math.floor(time / (60 * 60 * 24));
+            let hours = dateTime.getUTCHours();
+            let minutes = dateTime.getUTCMinutes();
+            let seconds = dateTime.getUTCSeconds();
+            let formattedTime = '';
+
+            if (days >= 1) {
+                let dys = '';
+                let hrs = '';
+
+                if (days == 1) {
+                    dys = 'day';
+                } else {
+                    dys = 'days';
+                }
+
+                if (hours == 1) {
+                    hrs = 'hr';
+                } else {
+                    hrs = 'hrs';
+                }
+                formattedTime = days.toString() + ' ' + dys.toString() + ' ' + hours.toString() + ' ' + hrs.toString();
+            } else if (hours >= 1) {
+                let hrs = '';
+                let mins = '';
+
+                if (hours == 1) {
+                    hrs = 'hr';
+                } else {
+                    hrs = 'hrs';
+                }
+
+                if (minutes == 1) {
+                    mins = 'min';
+                } else {
+                    mins = 'mins';
+                }
+                formattedTime = hours.toString() + ' ' + hrs.toString() + ' ' + minutes.toString() + ' ' + mins.toString();
+            } else if (minutes >= 1) {
+                let mins = '';
+                let secs = '';
+
+                if (minutes == 1) {
+                    mins = 'min';
+                } else {
+                    mins = 'mins';
+                }
+
+                if (seconds == 1) {
+                    secs = 'sec';
+                } else {
+                    secs = 'secs';
+                }
+                formattedTime = minutes.toString() + ' ' + mins.toString() + ' ' + seconds.toString() + ' ' + secs.toString();
+            } else if (seconds >= 1) {
+                let secs = '';
+
+                if (seconds == 1) {
+                    secs = 'sec';
+                } else {
+                    secs = 'secs';
+                }
+                formattedTime = seconds.toString() + ' ' + secs.toString();
+            }
+
+            document.getElementById('uploadTimeUT').innerHTML = '<span style="color: white">Output:</span><br>'+formattedTime ;
+        }
+
+        document.getElementById('sizeDropDown').addEventListener('change', function () {
+            calculateTime(parseFloat(fileSize.value), parseFloat(uploadSpeed.value));
+        });
+
+        document.getElementById('speedDropDown').addEventListener('change', function () {
+            calculateTime(parseFloat(fileSize.value), parseFloat(uploadSpeed.value));
+        });
+
+        document.getElementById('fileSizeUT').addEventListener('input', function () {
+            checkElement('fileSizeUT');
+        });
+
+        document.getElementById('uploadSpeedUT').addEventListener('input', function () {
+            checkElement('uploadSpeedUT');
+        });
+    </script>
